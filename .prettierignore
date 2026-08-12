@@ -1,0 +1,10 @@
+node_modules/
+coverage/
+playwright-report/
+test-results/
+data/
+*.db
+*.db-shm
+*.db-wal
+frontend/careQueue.html
+frontend/styles.css

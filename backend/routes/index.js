@@ -1,0 +1,37 @@
+import { Router } from 'express';
+import { healthController } from '../controllers/health.controller.js';
+import { authRouter } from './auth.routes.js';
+import { devTestRouter } from './dev-test.routes.js';
+import { createAuthService } from '../services/auth.service.js';
+import { createAuthController } from '../controllers/auth.controller.js';
+import { createAuthMiddleware } from '../middleware/auth.js';
+
+/**
+ * Assembles the /api/v1 router.
+ *
+ * @param {object} deps
+ * @param {object} deps.config - Application config.
+ * @param {import('better-sqlite3').Database} deps.db - Open SQLite connection.
+ * @param {import('pino').Logger} deps.logger - Pino logger instance.
+ * @returns {import('express').Router} The API router.
+ */
+export function apiRouter({ config, db }) {
+  const router = Router();
+
+  const authService = createAuthService({ db, config });
+  const authController = createAuthController({ auth: authService });
+  const { requireAuth, requireRole } = createAuthMiddleware({
+    db,
+    jwtSecret: config.jwtSecret,
+  });
+
+  router.get('/health', healthController.health);
+  router.get('/health/db', healthController.healthDb);
+  router.use('/auth', authRouter({ authController, requireAuth }));
+
+  if (config.nodeEnv !== 'production') {
+    router.use('/_dev', devTestRouter({ requireAuth, requireRole }));
+  }
+
+  return router;
+}

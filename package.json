@@ -1,0 +1,35 @@
+{
+  "name": "carequeue",
+  "version": "0.2.0",
+  "description": "CareQueue — an intelligent OPD queue and triage system for Indian hospitals. Phase 2: production-quality project foundation.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "node --watch backend/server.js",
+    "start": "node backend/server.js",
+    "test": "node --test",
+    "lint": "eslint .",
+    "format": "prettier --write \"backend/**/*.js\" \"tests/**/*.js\" \"frontend/app.js\" \"eslint.config.js\" \"package.json\" \".prettierrc.json\" \"docs/**/*.md\" \"README.md\"",
+    "db:migrate": "node backend/db/migrate.js",
+    "db:seed": "node backend/db/seed.js",
+    "db:seed:auth": "node backend/db/auth-seed.js",
+    "db:reset": "node backend/db/reset.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^11.7.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "pino": "^9.6.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.18.0",
+    "prettier": "^3.4.2",
+    "supertest": "^7.0.0"
+  }
+}
