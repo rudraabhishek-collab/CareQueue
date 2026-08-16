@@ -5,6 +5,7 @@ import { devTestRouter } from './dev-test.routes.js';
 import { createTriageRouter } from './triage.routes.js';
 import { createQueueRouter } from './queue.routes.js';
 import { createTokenRouter } from './tokens.routes.js';
+import { createPatientRouter } from './patient.routes.js';
 import { createAuthService } from '../services/auth.service.js';
 import { createAuthController } from '../controllers/auth.controller.js';
 import { createAuthMiddleware } from '../middleware/auth.js';
@@ -40,6 +41,9 @@ export function apiRouter({ config, db }) {
 
   const tokenRouter = createTokenRouter({ db, requireAuth });
   router.use('/tokens', tokenRouter);
+
+  const patientRouter = createPatientRouter({ db, requireAuth, requireRole });
+  router.use('/patients', patientRouter);
 
   if (config.nodeEnv !== 'production') {
     router.use('/_dev', devTestRouter({ requireAuth, requireRole }));

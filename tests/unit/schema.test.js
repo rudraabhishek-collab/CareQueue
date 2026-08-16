@@ -229,7 +229,7 @@ test('invalid age is rejected', () => {
 test('boundary ages are accepted', () => {
   const { db, cleanup } = createTestDb();
   insertPatient(db, { age: 0 });
-  insertPatient(db, { age: 120 });
+  insertPatient(db, { age: 120, phone: '9999000003' });
   const count = db.prepare('SELECT COUNT(*) AS count FROM patients').get().count;
   assert.equal(count, 2);
   cleanup();

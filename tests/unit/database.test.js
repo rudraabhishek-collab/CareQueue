@@ -27,6 +27,7 @@ test('opens an in-memory database and runs migrations', () => {
     '001_create_app_meta.sql',
     '002_create_core_schema.sql',
     '003_add_doctors_user_unique.sql',
+    '004_patient_module.sql',
   ]);
 
   ctx.cleanup();
@@ -37,7 +38,7 @@ test('runMigrations is idempotent', () => {
 
   runMigrations(ctx.db, { migrationsDir: ctx.config.migrationsDir });
   const applied = ctx.db.prepare('SELECT COUNT(*) AS count FROM schema_migrations').get();
-  assert.equal(applied.count, 3);
+  assert.equal(applied.count, 4);
 
   ctx.cleanup();
 });
