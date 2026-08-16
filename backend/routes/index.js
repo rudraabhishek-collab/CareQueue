@@ -2,6 +2,9 @@ import { Router } from 'express';
 import { healthController } from '../controllers/health.controller.js';
 import { authRouter } from './auth.routes.js';
 import { devTestRouter } from './dev-test.routes.js';
+import { createTriageRouter } from './triage.routes.js';
+import { createQueueRouter } from './queue.routes.js';
+import { createTokenRouter } from './tokens.routes.js';
 import { createAuthService } from '../services/auth.service.js';
 import { createAuthController } from '../controllers/auth.controller.js';
 import { createAuthMiddleware } from '../middleware/auth.js';
@@ -28,6 +31,15 @@ export function apiRouter({ config, db }) {
   router.get('/health', healthController.health);
   router.get('/health/db', healthController.healthDb);
   router.use('/auth', authRouter({ authController, requireAuth }));
+
+  const triageRouter = createTriageRouter({ db, config, requireAuth });
+  router.use('/triage', triageRouter);
+
+  const queueRouter = createQueueRouter({ db, requireAuth });
+  router.use('/queue', queueRouter);
+
+  const tokenRouter = createTokenRouter({ db, requireAuth });
+  router.use('/tokens', tokenRouter);
 
   if (config.nodeEnv !== 'production') {
     router.use('/_dev', devTestRouter({ requireAuth, requireRole }));
